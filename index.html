@@ -1,5 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>LOYAL AI - Chat + Image + Video AI</title>
+async function go(){
+  let v=document.getElementById('p').value;
+  let r=document.getElementById('r');
+  if(!v) return alert('Type something');
+  r.style.display='block';
+  r.innerHTML='⏳ LOYAL AI thinking...';
+  try{
+    let res = await fetch('/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({prompt:v})
+    });
+    let d = await res.json();
+    r.innerHTML='<b>LOYAL AI:</b><br><br>'+d.answer.replace(/\n/g,'<br>');
+  }catch(e){
+    r.innerHTML='❌ Add OPENAI_API_KEY in Vercel Env Variables: '+e.message;
+  }
+}
