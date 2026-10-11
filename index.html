@@ -1,18 +1,81 @@
-async function go(){
-  let v=document.getElementById('p').value;
-  let r=document.getElementById('r');
-  if(!v) return alert('Type something');
-  r.style.display='block';
-  r.innerHTML='⏳ LOYAL AI thinking...';
-  try{
-    let res = await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({prompt:v})
-    });
-    let d = await res.json();
-    r.innerHTML='<b>LOYAL AI:</b><br><br>'+d.answer.replace(/\n/g,'<br>');
-  }catch(e){
-    r.innerHTML='❌ Add OPENAI_API_KEY in Vercel Env Variables: '+e.message;
-  }
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOYAL AI - OCGLOBALTECH</title>
+
+<!-- AdSense - Replace YOUR_ID after approval -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
+
+<style>
+body{font-family:Arial;background:#0a0a0a;color:white;text-align:center;padding:20px}
+input{width:90%;max-width:500px;padding:15px;border-radius:10px;border:none;margin:10px}
+button{padding:12px 25px;border-radius:8px;border:none;background:#00ff88;color:black;font-weight:bold;cursor:pointer;margin:5px}
+#r{margin:20px auto;max-width:600px;background:#1a1a1a;padding:15px;border-radius:10px;text-align:left;display:none;white-space:pre-wrap}
+.ad{background:#222;padding:15px;margin:15px auto;max-width:600px;border-radius:8px}
+</style>
+</head>
+<body>
+
+<h1>🤖 LOYAL AI</h1>
+<p>By OCGLOBALTECH - Port Harcourt</p>
+
+<div class="ad">
+<!-- Replace with real ad after AdSense approval -->
+AD SPACE - Your Ad Will Show Here
+</div>
+
+<input id="p" placeholder="Ask anything e.g. Business plan for POS in PH...">
+<br>
+<button onclick="go()">Ask LOYAL AI</button>
+
+<div id="r"></div>
+
+<br>
+<h3>Remove Ads & Unlock Premium</h3>
+<button onclick="pay(100)">Pay ₦100 - 1 Day</button>
+<button onclick="pay(300)">Pay ₦300 - 7 Days</button>
+<button onclick="pay(500)">Pay ₦500 - 30 Days</button>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+// Paystack Payment
+function pay(amount){
+ let handler = PaystackPop.setup({
+  key: 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY',
+  email: 'customer@email.com',
+  amount: amount*100,
+  currency: 'NGN',
+  callback: function(response){
+   localStorage.setItem('loyal_paid','true');
+   alert('Payment Success! Ads removed. Ref: '+response.reference);
+  },
+  onClose: function(){ alert('Payment closed'); }
+ });
+ handler.openIframe();
 }
+
+// REAL AI Function - CORRECT WAY
+async function go(){
+ let v=document.getElementById('p').value;
+ let r=document.getElementById('r');
+ if(!v) return alert('Type something');
+ r.style.display='block';
+ r.innerHTML='⏳ LOYAL AI thinking...';
+ try{
+  let res = await fetch('/api/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({prompt:v})
+  });
+  let d = await res.json();
+  r.innerHTML='<b>LOYAL AI:</b><br><br>'+d.answer.replace(/\n/g,'<br>');
+ }catch(e){
+  r.innerHTML='❌ Error: Make sure you added OPENAI_API_KEY in Vercel and created api/chat.js<br>'+e.message;
+ }
+}
+</script>
+
+</body>
+</html>
