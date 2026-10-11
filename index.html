@@ -4,14 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LOYALS AI - Chat + Image + Video</title>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890" crossorigin="anonymous"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <style>
 body{background:#000;color:#fff;font-family:Arial;margin:0}
 header{padding:15px;border-bottom:1px solid #333;display:flex;justify-content:space-between;align-items:center}
 button{background:#10a37f;color:#fff;border:0;padding:10px 15px;border-radius:20px;margin:5px;cursor:pointer}
-textarea{width:90%;background:#222;color:#fff;border:0;padding:15px;border-radius:10px;margin:10px}
+textarea,input{width:90%;background:#222;color:#fff;border:0;padding:12px;border-radius:10px;margin:8px}
 .card{background:#111;padding:15px;border-radius:10px;margin:10px;text-align:center}
 .ad{background:#222;padding:10px;text-align:center;font-size:12px;color:#888;margin:10px 0}
+.link-box{border:1px dashed #10a37f;padding:15px;border-radius:10px;margin:15px 10px;background:#0a0a0a}
 </style>
 </head>
 <body>
@@ -24,41 +25,86 @@ textarea{width:90%;background:#222;color:#fff;border:0;padding:15px;border-radiu
 </div>
 </header>
 
-<div class="ad">Google Ad — You earn here — Free users see ads</div>
+<div class="ad">Ad — Free users see ads, Paid users don't</div>
 
 <div style="max-width:600px;margin:auto;padding:10px">
-<textarea id="prompt" placeholder="Ask anything... e.g. Write business plan for POS in PH"></textarea>
-<button onclick="generate()" style="width:95%;padding:15px;font-weight:bold" id="genBtn">Generate</button>
 
-<div class="ad">Ad Banner 2 — You earn $0.01 per view</div>
+<div class="link-box">
+<h3 style="margin:0">📱 Add Your Links</h3>
+<p style="font-size:13px;color:#aaa">Your WhatsApp / Page will show under every AI result you share</p>
+<input id="waLink" placeholder="WhatsApp e.g. 08012345678 or https://wa.me/2348012345678">
+<input id="fbLink" placeholder="Facebook Page e.g. https://facebook.com/yourpage">
+<input id="igLink" placeholder="Instagram e.g. https://instagram.com/yourname">
+<input id="webLink" placeholder="Any Website / App Link">
+<button onclick="saveLinks()" style="background:#25D366;width:95%">💾 Save My Links</button>
+<div id="myLinksDisplay" style="margin-top:10px;font-size:13px"></div>
+</div>
+
+<textarea id="prompt" placeholder="Ask anything..."></textarea>
+<button onclick="generate()" style="width:95%;padding:15px;font-weight:bold">Generate</button>
 
 <div id="result" class="card" style="display:none"></div>
 
-<h3 style="margin-top:30px">Pricing — No ads for paid</h3>
+<h3>Pricing — No ads for paid</h3>
 <div style="display:flex;gap:10px">
-<div class="card" style="flex:1"><b>$1</b><br>100 chats<br>20 images<br><button>Buy $1</button></div>
-<div class="card" style="flex:1;border:1px solid #10a37f"><b>$3 BEST</b><br>500 + 100 + 20 vid<br><button>Buy $3</button></div>
-<div class="card" style="flex:1"><b>$5</b><br>Unlimited<br><button>Buy $5</button></div>
+<div class="card" style="flex:1"><b>$1</b><br>₦1,600<br><button onclick="payWithPaystack(1,'Student')">Buy $1</button></div>
+<div class="card" style="flex:1;border:1px solid #10a37f"><b>$3 BEST</b><br>₦4,800<br><button onclick="payWithPaystack(3,'Business')">Buy $3</button></div>
+<div class="card" style="flex:1"><b>$5</b><br>₦8,000<br><button onclick="payWithPaystack(5,'Pro')">Buy $5</button></div>
 </div>
 
-<div class="ad">Ad Banner 3 — Bottom ad</div>
 </div>
 
 <script>
 let tab='chat';
-function setTab(t){tab=t;document.getElementById('prompt').placeholder=t=='chat'?'Ask anything...':t=='image'?'Describe image: e.g. Logo for OCGLOBALTECH':'Describe video: e.g. Man dancing in PH market'}
+function setTab(t){tab=t}
+function saveLinks(){
+ localStorage.setItem('waLink',document.getElementById('waLink').value);
+ localStorage.setItem('fbLink',document.getElementById('fbLink').value);
+ localStorage.setItem('igLink',document.getElementById('igLink').value);
+ localStorage.setItem('webLink',document.getElementById('webLink').value);
+ showLinks(); alert('Saved!');
+}
+function showLinks(){
+ let wa=localStorage.getItem('waLink')||''; let fb=localStorage.getItem('fbLink')||'';
+ let ig=localStorage.getItem('igLink')||''; let web=localStorage.getItem('webLink')||'';
+ document.getElementById('waLink').value=wa; document.getElementById('fbLink').value=fb;
+ document.getElementById('igLink').value=ig; document.getElementById('webLink').value=web;
+ if(wa||fb||ig||web){
+  document.getElementById('myLinksDisplay').innerHTML=`Saved: ${wa?`📱 WhatsApp `:''} ${fb?`FB `:''} ${ig?`IG `:''} ${web?`Web`:''}`;
+ }
+}
+showLinks();
+function getLinksButtons(){
+ let wa=localStorage.getItem('waLink'); let fb=localStorage.getItem('fbLink');
+ let ig=localStorage.getItem('igLink'); let web=localStorage.getItem('webLink');
+ let html='<div style="margin-top:15px;border-top:1px solid #333;padding-top:10px"><small>Contact:</small><br>';
+ if(wa) html+=`<a href="${wa.includes('http')?wa:'https://wa.me/'+wa.replace(/\D/g,'')}" target="_blank"><button style="background:#25D366">WhatsApp</button></a>`;
+ if(fb) html+=`<a href="${fb}" target="_blank"><button style="background:#1877f2">FB Page</button></a>`;
+ if(ig) html+=`<a href="${ig}" target="_blank"><button style="background:#E4405F">Instagram</button></a>`;
+ if(web) html+=`<a href="${web}" target="_blank"><button style="background:#333">Website</button></a>`;
+ return (wa||fb||ig||web)?html+'</div>':'';
+}
 function generate(){
- const p=document.getElementById('prompt').value;
- const r=document.getElementById('result');
- if(!p)return alert('Type something');
- r.style.display='block';
- r.innerHTML='Generating '+tab+'... <br><br>Ad loading... (You earn here)';
- setTimeout(()=>{
-  if(tab=='chat') r.innerHTML='<b>LOYALS AI:</b><br>'+p+'<br><br>Here is answer for: '+p+' — This will be connected to OpenAI API. For now demo. Buy $1 to get real AI.';
-  if(tab=='image') r.innerHTML='Image for: '+p+'<br><br><img src="https://via.placeholder.com/400x400/10a37f/fff?text=AI+Image" style="width:100%;border-radius:10px"><br><small>Real image comes after you add OpenAI key</small>';
-  if(tab=='video') r.innerHTML='Video for: '+p+'<br><br><video controls style="width:100%"><source src="https://www.w3schools.com/html/mov_bbb.mp4"></video><br><small>Real video after Replicate API</small>';
- },2000)
+ const p=document.getElementById('prompt').value; const r=document.getElementById('result');
+ if(!p)return alert('Type something'); r.style.display='block'; r.innerHTML='Generating...';
+ setTimeout(()=>{ r.innerHTML='<b>Result:</b> '+p+getLinksButtons(); },1000)
+}
+function payWithPaystack(amountDollar, planName) {
+  let amountNaira = amountDollar * 1600;
+  let handler = PaystackPop.setup({
+    key: 'pk_live_16a8e4130e54cdbd8eb5a693ae37a52d874e3ee0',
+    email: prompt("Enter your email for receipt:"),
+    amount: amountNaira * 100,
+    currency: 'NGN',
+    ref: ''+Math.floor((Math.random() * 1000000000) + 1),
+    callback: function(response){
+      alert('Payment success! Plan: ' + planName + ' Ref: ' + response.reference + ' — Ads removed!');
+      localStorage.setItem('paidPlan', planName);
+    },
+    onClose: function(){}
+  });
+  handler.openIframe();
 }
 </script>
 </body>
-  </html>
+</html>
