@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LOYALS AI - Chat + Image + Video</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890" crossorigin="anonymous"></script>
+<style>
+body{background:#000;color:#fff;font-family:Arial;margin:0}
+header{padding:15px;border-bottom:1px solid #333;display:flex;justify-content:space-between;align-items:center}
+button{background:#10a37f;color:#fff;border:0;padding:10px 15px;border-radius:20px;margin:5px;cursor:pointer}
+textarea{width:90%;background:#222;color:#fff;border:0;padding:15px;border-radius:10px;margin:10px}
+.card{background:#111;padding:15px;border-radius:10px;margin:10px;text-align:center}
+.ad{background:#222;padding:10px;text-align:center;font-size:12px;color:#888;margin:10px 0}
+</style>
+</head>
+<body>
+<header>
+<h2>LOYALS AI 🤖</h2>
+<div>
+<button onclick="setTab('chat')">Chat 💬</button>
+<button onclick="setTab('image')">Image 🎨</button>
+<button onclick="setTab('video')">Video 🎬</button>
+</div>
+</header>
+
+<div class="ad">Google Ad — You earn here — Free users see ads</div>
+
+<div style="max-width:600px;margin:auto;padding:10px">
+<textarea id="prompt" placeholder="Ask anything... e.g. Write business plan for POS in PH"></textarea>
+<button onclick="generate()" style="width:95%;padding:15px;font-weight:bold" id="genBtn">Generate</button>
+
+<div class="ad">Ad Banner 2 — You earn $0.01 per view</div>
+
+<div id="result" class="card" style="display:none"></div>
+
+<h3 style="margin-top:30px">Pricing — No ads for paid</h3>
+<div style="display:flex;gap:10px">
+<div class="card" style="flex:1"><b>$1</b><br>100 chats<br>20 images<br><button>Buy $1</button></div>
+<div class="card" style="flex:1;border:1px solid #10a37f"><b>$3 BEST</b><br>500 + 100 + 20 vid<br><button>Buy $3</button></div>
+<div class="card" style="flex:1"><b>$5</b><br>Unlimited<br><button>Buy $5</button></div>
+</div>
+
+<div class="ad">Ad Banner 3 — Bottom ad</div>
+</div>
+
+<script>
+let tab='chat';
+function setTab(t){tab=t;document.getElementById('prompt').placeholder=t=='chat'?'Ask anything...':t=='image'?'Describe image: e.g. Logo for OCGLOBALTECH':'Describe video: e.g. Man dancing in PH market'}
+function generate(){
+ const p=document.getElementById('prompt').value;
+ const r=document.getElementById('result');
+ if(!p)return alert('Type something');
+ r.style.display='block';
+ r.innerHTML='Generating '+tab+'... <br><br>Ad loading... (You earn here)';
+ setTimeout(()=>{
+  if(tab=='chat') r.innerHTML='<b>LOYALS AI:</b><br>'+p+'<br><br>Here is answer for: '+p+' — This will be connected to OpenAI API. For now demo. Buy $1 to get real AI.';
+  if(tab=='image') r.innerHTML='Image for: '+p+'<br><br><img src="https://via.placeholder.com/400x400/10a37f/fff?text=AI+Image" style="width:100%;border-radius:10px"><br><small>Real image comes after you add OpenAI key</small>';
+  if(tab=='video') r.innerHTML='Video for: '+p+'<br><br><video controls style="width:100%"><source src="https://www.w3schools.com/html/mov_bbb.mp4"></video><br><small>Real video after Replicate API</small>';
+ },2000)
+}
+</script>
+</body>
+  </html>
